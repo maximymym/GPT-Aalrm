@@ -4,8 +4,9 @@ A minimal alarm clock application for Windows inspired by the look of the iPhone
 
 ## Features
 - Simple black theme with large digital clock
-- Set a daily alarm
-- Small fade animation when the alarm goes off
+- Wheel style time selector
+- Multiple alarms with optional custom music
+- Small fade animation when an alarm goes off
 
 ## Usage
 Install requirements first:
