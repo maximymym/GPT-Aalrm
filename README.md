@@ -37,3 +37,11 @@ pyinstaller --onefile --windowed alarm.py
 The resulting executable will be placed in the `dist` folder. Building a Windows
 binary from Linux is not officially supported, so perform these steps on
 a Windows system.
+
+## Pixel Runner Game
+A minimal pixel platformer built with Pygame.
+
+Run it with:
+```bash
+python pixel_runner.py
+```
