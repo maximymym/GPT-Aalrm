@@ -10,4 +10,6 @@ def test_add_alarm(qtbot):
     widget.time_edit.setTime(target_time)
     widget.add_alarm()
     assert len(widget.alarms) == 1
-    assert widget.alarms[0]["time"].strftime("%H:%M") == target_time.strftime("%H:%M")
+    alarm = widget.alarms[0]
+    assert alarm["time"].strftime("%H:%M") == target_time.strftime("%H:%M")
+    assert alarm["enabled"] is True
