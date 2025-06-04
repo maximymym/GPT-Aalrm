@@ -7,6 +7,7 @@ A minimal alarm clock application for Windows inspired by the look of the iPhone
 - Wheel style time selector
 - Multiple alarms with optional custom music
 - Small fade animation when an alarm goes off
+- Multiple countdown timers
 
 ## Usage
 Install requirements first:

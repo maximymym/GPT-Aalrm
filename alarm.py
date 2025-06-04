@@ -14,6 +14,10 @@ class AlarmClock(QtWidgets.QWidget):
         main_layout = QtWidgets.QVBoxLayout(self)
 
         self.tabs = QtWidgets.QTabWidget()
+        self.tabs.setStyleSheet(
+            "QTabBar::tab {background: #444; color: white;}"
+            "QTabBar::tab:selected {background: black; color: white;}"
+        )
         main_layout.addWidget(self.tabs)
 
         self.alarm_tab = QtWidgets.QWidget()
@@ -52,11 +56,6 @@ class AlarmClock(QtWidgets.QWidget):
         self.tabs.addTab(self.timer_tab, "Timer")
         timer_layout = QtWidgets.QVBoxLayout(self.timer_tab)
 
-        self.timer_display = QtWidgets.QLabel("00:00:00")
-        self.timer_display.setFont(time_font)
-        self.timer_display.setAlignment(QtCore.Qt.AlignCenter)
-        timer_layout.addWidget(self.timer_display)
-
         timer_selector = QtWidgets.QHBoxLayout()
         self.timer_edit = QtWidgets.QTimeEdit(QtCore.QTime(0, 1, 0))
         self.timer_edit.setDisplayFormat("HH:mm:ss")
@@ -64,16 +63,19 @@ class AlarmClock(QtWidgets.QWidget):
         self.timer_edit.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
         timer_selector.addWidget(self.timer_edit)
 
-        self.start_timer_button = QtWidgets.QPushButton("Start Timer")
-        self.start_timer_button.clicked.connect(self.toggle_timer)
-        timer_selector.addWidget(self.start_timer_button)
+        self.add_timer_button = QtWidgets.QPushButton("Add Timer")
+        self.add_timer_button.clicked.connect(self.add_timer)
+        timer_selector.addWidget(self.add_timer_button)
 
         timer_layout.addLayout(timer_selector)
+
+        self.timers_view = QtWidgets.QListWidget()
+        timer_layout.addWidget(self.timers_view)
 
         self.alarms = []
         self.selected_sound = None
 
-        self.timer_remaining = None
+        self.timers = []
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_clock)
@@ -95,18 +97,16 @@ class AlarmClock(QtWidgets.QWidget):
             display += f" - {QtCore.QFileInfo(sound).fileName()}"
         self.alarms_view.addItem(display)
 
-    def toggle_timer(self):
-        if self.timer_remaining is None:
-            t = self.timer_edit.time()
-            self.timer_remaining = t.hour() * 3600 + t.minute() * 60 + t.second()
-            if self.timer_remaining == 0:
-                self.timer_remaining = None
-                return
-            self.start_timer_button.setText("Stop Timer")
-        else:
-            self.timer_remaining = None
-            self.start_timer_button.setText("Start Timer")
-            self.timer_display.setText("00:00:00")
+    def add_timer(self):
+        t = self.timer_edit.time()
+        remaining = t.hour() * 3600 + t.minute() * 60 + t.second()
+        if remaining == 0:
+            return
+        self.timers.append(remaining)
+        h = remaining // 3600
+        m = (remaining % 3600) // 60
+        s = remaining % 60
+        self.timers_view.addItem(f"{h:02d}:{m:02d}:{s:02d}")
 
     def update_clock(self):
         now = datetime.datetime.now().time()
@@ -117,17 +117,18 @@ class AlarmClock(QtWidgets.QWidget):
                 alarm["triggered"] = True
                 self.trigger_alarm(alarm)
 
-        if self.timer_remaining is not None:
-            if self.timer_remaining > 0:
-                self.timer_remaining -= 1
-                h = self.timer_remaining // 3600
-                m = (self.timer_remaining % 3600) // 60
-                s = self.timer_remaining % 60
-                self.timer_display.setText(f"{h:02d}:{m:02d}:{s:02d}")
-            if self.timer_remaining == 0:
-                self.timer_remaining = None
-                self.start_timer_button.setText("Start Timer")
+        for i in reversed(range(len(self.timers))):
+            self.timers[i] -= 1
+            if self.timers[i] <= 0:
+                self.timers.pop(i)
+                self.timers_view.takeItem(i)
                 QtWidgets.QMessageBox.information(self, "Timer", "Time's up!")
+            else:
+                remaining = self.timers[i]
+                h = remaining // 3600
+                m = (remaining % 3600) // 60
+                s = remaining % 60
+                self.timers_view.item(i).setText(f"{h:02d}:{m:02d}:{s:02d}")
 
     def trigger_alarm(self, alarm):
         animation = QtCore.QPropertyAnimation(self, b"windowOpacity")
