@@ -11,4 +11,3 @@ def test_add_alarm(qtbot):
     widget.add_alarm()
     assert len(widget.alarms) == 1
     assert widget.alarms[0]["time"].strftime("%H:%M") == target_time.strftime("%H:%M")
-
