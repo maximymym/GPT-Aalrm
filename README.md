@@ -39,7 +39,9 @@ binary from Linux is not officially supported, so perform these steps on
 a Windows system.
 
 ## Pixel Runner Game
-A minimal pixel platformer built with Pygame.
+A simple platformer with a short storyline. Use the arrow keys to move and
+press Space to jump. Reach the blue crystal to advance through the two short
+levels.
 
 Run it with:
 ```bash
