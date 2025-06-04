@@ -13,4 +13,3 @@ def test_add_alarm(qtbot):
     alarm = widget.alarms[0]
     assert alarm["time"].strftime("%H:%M") == target_time.strftime("%H:%M")
     assert alarm["enabled"] is True
-
