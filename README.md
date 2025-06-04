@@ -7,6 +7,7 @@ A minimal alarm clock application for Windows inspired by the look of the iPhone
 - Wheel style time selector
 - Multiple alarms with optional custom music
 - Small fade animation when an alarm goes off
+- Multiple countdown timers
 
 ## Usage
 Install requirements first:
@@ -23,3 +24,16 @@ Run the tests with:
 ```bash
 pytest -v
 ```
+
+## Building a Windows executable
+To create a standalone `exe` you can use [PyInstaller](https://www.pyinstaller.org/) on a
+Windows machine:
+
+```bash
+pip install pyinstaller
+pyinstaller --onefile --windowed alarm.py
+```
+
+The resulting executable will be placed in the `dist` folder. Building a Windows
+binary from Linux is not officially supported, so perform these steps on
+a Windows system.
