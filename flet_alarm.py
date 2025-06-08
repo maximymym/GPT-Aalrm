@@ -55,15 +55,15 @@ class AlarmRepository:
         self.conn.commit()
 
 
-class AlarmApp(ft.UserControl):
-    def __init__(self, repo: AlarmRepository):
-        super().__init__()
+class AlarmApp:
+    """Simple alarm manager UI implemented with Flet."""
+
+    def __init__(self, page: ft.Page, repo: AlarmRepository):
+        self.page = page
         self.repo = repo
-        self.alarms_table = ft.DataTable()
         self.dialog = None
         self.edit_id = None
 
-    def build(self):
         self.alarms_table = ft.DataTable(
             columns=[
                 ft.DataColumn(ft.Text("Time")),
@@ -72,9 +72,11 @@ class AlarmApp(ft.UserControl):
                 ft.DataColumn(ft.Text("Actions")),
             ]
         )
-        self.refresh()
+
         add_btn = ft.FloatingActionButton(icon=ft.icons.ADD, on_click=self.open_add)
-        return ft.Column([self.alarms_table, add_btn])
+        self.container = ft.Column([self.alarms_table, add_btn])
+        self.refresh()
+        self.page.add(self.container)
 
     def refresh(self):
         rows = []
@@ -93,7 +95,7 @@ class AlarmApp(ft.UserControl):
             )
             rows.append(row)
         self.alarms_table.rows = rows
-        self.update()
+        self.page.update()
 
     def make_toggle(self, alarm_id):
         def toggle(e):
@@ -159,8 +161,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = "#121212"
     repo = AlarmRepository()
-    app = AlarmApp(repo)
-    page.add(app)
+    AlarmApp(page, repo)
 
 if __name__ == "__main__":
     ft.app(target=main)
