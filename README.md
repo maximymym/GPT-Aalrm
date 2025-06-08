@@ -14,9 +14,18 @@ Install requirements first:
 ```bash
 pip install -r requirements.txt
 ```
-Then run the app:
+Then run the PyQt demo app:
 ```bash
 python alarm.py
+```
+
+### Flet alarm manager
+An alternative implementation built with [Flet](https://flet.dev) and SQLite is
+provided in `flet_alarm.py`.
+
+Run it with:
+```bash
+python flet_alarm.py
 ```
 
 ## Testing
