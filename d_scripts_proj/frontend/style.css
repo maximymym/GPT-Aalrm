@@ -1,0 +1,30 @@
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,#06b6d4 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#06b6d4);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: l13 1s infinite linear;
+}
+
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
+}
+
+/* For YouTube Embed */
+.aspect-w-16 {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+}
+.aspect-h-9 {
+    height: 0;
+}
+.aspect-w-16 > iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
